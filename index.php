@@ -1,5 +1,19 @@
 <?php
-session_start();
+// session_start();
+
+// Create connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "superheroes";
+// $dbname = "superheres"; 
+// ^^ fake database to check for connection error ^^
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 echo 'start of script';
 echo '<br>';
