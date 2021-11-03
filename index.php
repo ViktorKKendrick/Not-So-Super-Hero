@@ -48,9 +48,14 @@ function init(){
 //store an array, push, pop, splice
 
 //Create Hero
-function createHero ($name, $tagline){
-echo '<pre>' . print_r([$name, $tagline], 1) . '</pre>';
-array_push($_SESSION['heroes'], [$name, $tagline]);
+function createHero (String $name, String $about_me, $biography, $abilities, $conn){
+     $sql = "INSERT INTO heroes (name, about_me, biography) VALUES ('$name', '$about_me', '$biography')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 }
 //Read Heroes
 function viewAllHeroes(){
