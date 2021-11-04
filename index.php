@@ -9,10 +9,13 @@ $dbname = "superheroes";
 // $dbname = "superheres"; 
 // ^^ fake database to check for connection error ^^
 $conn = new mysqli($servername, $username, $password, $dbname);
-
+$conn2 = new mysqli($servername, $username, $password, 'supervillains');
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}
+if ($conn2->connect_error) {
+    die("Connection failed: " . $conn2->connect_error);
 }
 
 //Create Hero
@@ -30,6 +33,21 @@ function createHero ( $name,  $about_me, $biography){
     // echo 'Hero Created';
     
 }
+//Create Villain
+function createVillain ( $name,  $about_me, $biography){
+     $sql = "INSERT INTO villains (name, about_me, biography) VALUES ('$name', '$about_me', '$biography')";
+
+     global $conn2;
+    if ($conn2->query($sql) === TRUE) {
+        echo "New Hero created successfully";
+        echo '<br>';
+    }
+    else {
+        echo "Error: " . $sql . "<br>" . $conn2->error;
+    }
+    // echo 'Hero Created';
+    
+}
 
 //Read Heroes
 function viewAllHeroes(){
@@ -38,13 +56,38 @@ function viewAllHeroes(){
     global $conn;
     $result = $conn->query($sql);
         while ($row = $result->fetch_assoc()) {
-            echo $row['id'] . "Name: " . $row['name'] . ". <br/>About Me: " . $row['about_me'] . "<br/><br/>";
+            echo "Name: " . $row['name'] . ". <br/>About Me: " . $row['about_me'] . "<br/><br/>";
+        }
+}
+//Read Villain
+function viewAllVillains(){
+    $sql = "SELECT name, about_me FROM villains";
+
+    global $conn2;
+    $result = $conn2->query($sql);
+        while ($row = $result->fetch_assoc()) {
+            echo "Name: " . $row['name'] . ". <br/>About Me: " . $row['about_me'] . "<br/><br/>";
         }
 }
 
 //Update Hero
 function updateHero($name, $about_me, $biography){
-    
+    if($name != 'Tom'){
+        $sql = "UPDATE heroes SET name='$name', about_me='$about_me', biography='$biography' WHERE name='$name'";
+    }
+    else{
+        echo "You Can't Change me";
+        echo '<br>';
+    }
+    global $conn;
+        if ($conn->query($sql) === TRUE) {
+            echo "Updated successfully";
+            echo '<br>';
+        }
+        else {
+            echo "Error Updating: " . $conn->error;
+            echo '<br>';
+        }
 }
 
 //Delete Hero
@@ -79,11 +122,19 @@ if($action !=''){
             createHero($_GET["name"], $_GET["about_me"], $_GET["biography"]);
             viewAllHeroes();
             break;
-        case 'read':
+        case 'readH':
             viewAllHeroes();
             break;
-        case 'update':
+        case 'updateH':
             updateHero($_GET['name'], $_GET['about_me'], $_GET['biography']);
+            viewAllHeroes();
+            break;
+        case 'deleteH':
+            deleteHero($_GET['name']);
+            viewAllHeroes();
+            break;
+        case 'createV':
+            deleteHero($_GET['name']);
             viewAllHeroes();
             break;
         case 'delete':
