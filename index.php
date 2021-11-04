@@ -1,6 +1,4 @@
 <?php
-// session_start();
-
 // Create connection
 $servername = "localhost";
 $username = "root";
@@ -39,7 +37,7 @@ function createVillain ( $name,  $about_me, $biography){
 
      global $conn2;
     if ($conn2->query($sql) === TRUE) {
-        echo "New Hero created successfully";
+        echo "New Villain created successfully";
         echo '<br>';
     }
     else {
@@ -89,6 +87,20 @@ function updateHero($name, $about_me, $biography){
             echo '<br>';
         }
 }
+//Update Villain
+function updateVillain($name, $about_me, $biography){
+
+        $sql = "UPDATE villains SET name='$name', about_me='$about_me', biography='$biography' WHERE name='$name'";
+    global $conn2;
+        if ($conn2->query($sql) === TRUE) {
+            echo "Updated successfully";
+            echo '<br>';
+        }
+        else {
+            echo "Error Updating: " . $conn2->error;
+            echo '<br>';
+        }
+}
 
 //Delete Hero
 function deleteHero($name){
@@ -108,6 +120,19 @@ function deleteHero($name){
         echo '<br>';
     } else {
         echo "Error when deleting:" . $conn->error;
+        echo "<br>";
+    }
+}
+//Delete Villain
+function deleteVillain($name){
+        $sql = "DELETE FROM villains WHERE name='$name'";
+    global $conn2;
+    
+     if ($conn2->query($sql) === TRUE) {
+        echo "$name deleted successfully";
+        echo '<br>';
+    } else {
+        echo "Error when deleting:" . $conn2->error;
         echo "<br>";
     }
 }
@@ -134,12 +159,19 @@ if($action !=''){
             viewAllHeroes();
             break;
         case 'createV':
-            deleteHero($_GET['name']);
-            viewAllHeroes();
+            createVillain($_GET["name"], $_GET["about_me"], $_GET["biography"]);
+            viewAllVillains();
             break;
-        case 'delete':
-            deleteHero($_GET['name']);
-            viewAllHeroes();
+        case 'readV':
+            viewAllVillains();
+            break;
+        case 'updateV':
+            updateVillain($_GET['name'], $_GET['about_me'], $_GET['biography']);
+            viewAllVillains();
+            break;
+        case 'deleteV':
+            deleteVillain($_GET['name']);
+            viewAllVillains();
             break;
         default:
             echo '404: Page Not Found';
