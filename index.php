@@ -14,52 +14,31 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-echo 'start of script';
-echo '<br>';
-
-$action = $_GET['action'];
-
-if($action !=''){
-    switch($action){
-        case 'create':
-            createHero($_GET['name'], $_GET['tagline']);
-            break;
-        case 'read':
-            
-            break;
-        case 'update':
-            updateHero($_GET['name'], $_GET['tagline']);
-            break;
-        case 'delete':
-            deleteHero($_GET['name']);
-            break;
-        default:
-        init();
-    }
-    viewAllHeroes();
-}
-
-function init(){
-    $_SESSION['heroes'] = [];
-}
 //Session to store information
-
-//store an array, push, pop, splice
-
 //Create Hero
-function createHero (String $name, String $about_me, $biography, $abilities, $conn){
+function createHero ( $name,  $about_me, $biography){
      $sql = "INSERT INTO heroes (name, about_me, biography) VALUES ('$name', '$about_me', '$biography')";
 
+     global $conn;
     if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
-    } else {
+        echo "New Hero created successfully";
+        echo '<br>';
+    }
+    else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+    // echo 'Hero Created';
+    
 }
 //Read Heroes
 function viewAllHeroes(){
-echo '<pre> view' . print_r($_SESSION['heroes'], 1) . '</pre>';
+    $sql = "SELECT name, about_me FROM heroes";
+
+    global $conn;
+    $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+            echo $row['id'] . "Name: " . $row['name'] . ". <br/>About Me: " . $row['about_me'] . "<br/><br/>";
+        }
 }
 //Update Hero
 function updateHero($name, $tagline){
@@ -69,9 +48,29 @@ function updateHero($name, $tagline){
 function deleteHero($name){
 
 }
-echo '<br>';
-echo 'End of script';
+$action = $_GET['action'];
 
+if($action !=''){
+    switch($action){
+        case "create":
+            createHero($_GET["name"], $_GET["about_me"], $_GET["biography"]);
+            viewAllHeroes();
+            break;
+        case 'read':
+            viewAllHeroes();
+            break;
+        case 'update':
+            updateHero($_GET['name'], $_GET['tagline']);
+            break;
+        case 'delete':
+            deleteHero($_GET['name']);
+            break;
+        default:
+            echo '404: Page Not Found';
+            break;
+    }
+    
+}
 
-
+$conn->close();
 ?>
