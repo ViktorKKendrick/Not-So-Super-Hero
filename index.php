@@ -18,12 +18,18 @@ if ($conn2->connect_error) {
 
 //Create Hero
 function createHero ( $name,  $about_me, $biography){
+    if(strlen($name) == 0){
+        echo 'Error 406: Please enter a Name';
+        return;
+    }
+
      $sql = "INSERT INTO heroes (name, about_me, biography) VALUES ('$name', '$about_me', '$biography')";
 
      global $conn;
     if ($conn->query($sql) === TRUE) {
         echo "New Hero created successfully";
         echo '<br>';
+        viewAllHeroes();
     }
     else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -33,12 +39,17 @@ function createHero ( $name,  $about_me, $biography){
 }
 //Create Villain
 function createVillain ( $name,  $about_me, $biography){
+    if(strlen($name) == 0){
+        echo 'Error 406: Please enter a Name';
+        return;
+    }
      $sql = "INSERT INTO villains (name, about_me, biography) VALUES ('$name', '$about_me', '$biography')";
 
      global $conn2;
     if ($conn2->query($sql) === TRUE) {
         echo "New Villain created successfully";
         echo '<br>';
+        viewAllVillains();
     }
     else {
         echo "Error: " . $sql . "<br>" . $conn2->error;
@@ -70,6 +81,10 @@ function viewAllVillains(){
 
 //Update Hero
 function updateHero($name, $about_me, $biography){
+    if(strlen($name) == 0){
+        echo 'Error 406: Please enter a Name';
+        return;
+    }
     if($name != 'Tom'){
         $sql = "UPDATE heroes SET name='$name', about_me='$about_me', biography='$biography' WHERE name='$name'";
     }
@@ -81,6 +96,7 @@ function updateHero($name, $about_me, $biography){
         if ($conn->query($sql) === TRUE) {
             echo "Updated successfully";
             echo '<br>';
+            viewAllVillains();
         }
         else {
             echo "Error Updating: " . $conn->error;
@@ -89,12 +105,17 @@ function updateHero($name, $about_me, $biography){
 }
 //Update Villain
 function updateVillain($name, $about_me, $biography){
+    if(strlen($name) == 0){
+        echo 'Error 406: Please enter a Name';
+        return;
+    }
 
         $sql = "UPDATE villains SET name='$name', about_me='$about_me', biography='$biography' WHERE name='$name'";
     global $conn2;
         if ($conn2->query($sql) === TRUE) {
             echo "Updated successfully";
             echo '<br>';
+            viewAllVillains();
         }
         else {
             echo "Error Updating: " . $conn2->error;
@@ -104,6 +125,10 @@ function updateVillain($name, $about_me, $biography){
 
 //Delete Hero
 function deleteHero($name){
+    if(strlen($name) == 0){
+        echo 'Error 406: Please enter a Name';
+        return;
+    }
     if($name != 'Tom'){
         $sql = "DELETE FROM heroes WHERE name='$name'";
     }
@@ -118,6 +143,7 @@ function deleteHero($name){
      if ($conn->query($sql) === TRUE) {
         echo "$name deleted successfully";
         echo '<br>';
+        viewAllVillains();
     }
     else {
         echo "Error when deleting:" . $conn->error;
@@ -126,12 +152,17 @@ function deleteHero($name){
 }
 //Delete Villain
 function deleteVillain($name){
+    if(strlen($name) == 0){
+        echo 'Error 406: Please enter a Name';
+        return;
+    }
         $sql = "DELETE FROM villains WHERE name='$name'";
     global $conn2;
     
      if ($conn2->query($sql) === TRUE) {
         echo "$name deleted successfully";
         echo '<br>';
+        viewAllVillains();
     }
     else {
         echo "Error when deleting:" . $conn2->error;
@@ -185,40 +216,44 @@ if($action !=''){
     switch($action){
         case "createH":
             createHero($_GET["name"], $_GET["about_me"], $_GET["biography"]);
-            viewAllHeroes();
             break;
+            
         case 'readH':
             viewAllHeroes();
             break;
+            
         case 'updateH':
             updateHero($_GET['name'], $_GET['about_me'], $_GET['biography']);
-            viewAllHeroes();
             break;
+            
         case 'deleteH':
             deleteHero($_GET['name']);
-            viewAllHeroes();
             break;
+            
         case 'createV':
             createVillain($_GET["name"], $_GET["about_me"], $_GET["biography"]);
-            viewAllVillains();
             break;
+            
         case 'readV':
             viewAllVillains();
             break;
+            
         case 'updateV':
             updateVillain($_GET['name'], $_GET['about_me'], $_GET['biography']);
-            viewAllVillains();
             break;
+            
         case 'deleteV':
             deleteVillain($_GET['name']);
-            viewAllVillains();
             break;
+            
         case 'getAbility':
             getAbility();
             break;
+            
         case 'getHeroAbilities':
             getHeroAbilities();
             break;
+            
         default:
             echo '404: Page Not Found';
             break;
