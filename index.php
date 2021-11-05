@@ -178,7 +178,7 @@ function deleteVillain($name){
     }
 }
 //Get Ability
-function getAbility(){
+function getAllAbilities(){
     $sql = "SELECT ability FROM ability_type";
     global $conn;
     $result = $conn->query($sql);
@@ -254,8 +254,8 @@ if($action !=''){
             deleteVillain($_GET['name']);
             break;
 
-        case 'getAbility':
-            getAbility();
+        case 'getAllAbilities':
+            getAllAbilities();
             break;
 
         case 'getHeroAbilities':
