@@ -22,6 +22,10 @@ function createHero ( $name,  $about_me, $biography){
         echo 'Error 406: Please enter a Name';
         return;
     }
+    else if(strtolower($name) === 'teapot'){
+        echo 'Error 418.';
+        return;
+    }
 
      $sql = "INSERT INTO heroes (name, about_me, biography) VALUES ('$name', '$about_me', '$biography')";
 
@@ -41,6 +45,10 @@ function createHero ( $name,  $about_me, $biography){
 function createVillain ( $name,  $about_me, $biography){
     if(strlen($name) == 0){
         echo 'Error 406: Please enter a Name';
+        return;
+    }
+    else if(strtolower($name) === 'teapot'){
+        echo 'Error 418.';
         return;
     }
      $sql = "INSERT INTO villains (name, about_me, biography) VALUES ('$name', '$about_me', '$biography')";
@@ -217,43 +225,43 @@ if($action !=''){
         case "createH":
             createHero($_GET["name"], $_GET["about_me"], $_GET["biography"]);
             break;
-            
+
         case 'readH':
             viewAllHeroes();
             break;
-            
+
         case 'updateH':
             updateHero($_GET['name'], $_GET['about_me'], $_GET['biography']);
             break;
-            
+
         case 'deleteH':
             deleteHero($_GET['name']);
             break;
-            
+
         case 'createV':
             createVillain($_GET["name"], $_GET["about_me"], $_GET["biography"]);
             break;
-            
+
         case 'readV':
             viewAllVillains();
             break;
-            
+
         case 'updateV':
             updateVillain($_GET['name'], $_GET['about_me'], $_GET['biography']);
             break;
-            
+
         case 'deleteV':
             deleteVillain($_GET['name']);
             break;
-            
+
         case 'getAbility':
             getAbility();
             break;
-            
+
         case 'getHeroAbilities':
             getHeroAbilities();
             break;
-            
+
         default:
             echo '404: Page Not Found';
             break;
