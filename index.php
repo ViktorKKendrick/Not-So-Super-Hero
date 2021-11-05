@@ -118,7 +118,8 @@ function deleteHero($name){
      if ($conn->query($sql) === TRUE) {
         echo "$name deleted successfully";
         echo '<br>';
-    } else {
+    }
+    else {
         echo "Error when deleting:" . $conn->error;
         echo "<br>";
     }
@@ -131,12 +132,51 @@ function deleteVillain($name){
      if ($conn2->query($sql) === TRUE) {
         echo "$name deleted successfully";
         echo '<br>';
-    } else {
+    }
+    else {
         echo "Error when deleting:" . $conn2->error;
         echo "<br>";
     }
 }
+//Get Ability
+function getAbility(){
+    $sql = "SELECT ability FROM ability_type";
+    global $conn;
+    $result = $conn->query($sql);
+    // $result->num_rows
+    if ($conn->query($sql) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            print_r($row);
+            echo '<br>';
+        }
+    }
+    else {
+        echo $conn->errors;
+    }
+}
 
+function getHeroAbilities(){
+    $id = $_GET["id"];
+    $sql = "SELECT 
+    heroes.name, heroes.about_me, GROUP_CONCAT(ability_type.ability separator ', ') ability_type
+    FROM ((heroes
+    INNER JOIN abilities ON heroes.id = abilities.hero_id)
+    INNER JOIN ability_type ON abilities.ability_id = ability_type.id)
+    GROUP BY heroes.name, heroes.about_me";
+    global $conn;
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            print_r($row);
+            echo '<br>';
+        }
+    }
+    else {
+        echo $conn->errors;
+    }
+}
 
 $action = $_GET['action'];
 
@@ -172,6 +212,12 @@ if($action !=''){
         case 'deleteV':
             deleteVillain($_GET['name']);
             viewAllVillains();
+            break;
+        case 'getAbility':
+            getAbility();
+            break;
+        case 'getHeroAbilities':
+            getHeroAbilities();
             break;
         default:
             echo '404: Page Not Found';
