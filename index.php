@@ -104,7 +104,7 @@ function updateHero($name, $about_me, $biography){
         if ($conn->query($sql) === TRUE) {
             echo "Updated successfully";
             echo '<br>';
-            viewAllVillains();
+            viewAllHeroes();
         }
         else {
             echo "Error Updating: " . $conn->error;
@@ -151,7 +151,7 @@ function deleteHero($name){
      if ($conn->query($sql) === TRUE) {
         echo "$name deleted successfully";
         echo '<br>';
-        viewAllVillains();
+        viewAllHeroes();
     }
     else {
         echo "Error when deleting:" . $conn->error;
